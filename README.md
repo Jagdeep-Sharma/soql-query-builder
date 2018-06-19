@@ -39,3 +39,58 @@ Outputs to
 ```
 SELECT FirstName,LastName FROM Contact WHERE Department != null AND Level__c = 'Primary'
 ```
+### 4. Advanced Filtering
+```
+String soql = new QueryBuilder()
+                  .sel('FirstName')
+                  .sel('LastName')
+                  .frm('Contact')
+                  .whr('Department != null', 1)
+                  .whr('Department = \'Internal Operations\'', 2)
+                  .whr('Level__c != null', 3)
+                  .whr('Level__c = \'Primary\'', 4)
+                  .advwhr('(1 AND 2) OR (3 AND 4)')
+                  .soql();
+System.debug(soql);
+```
+Outputs to
+```
+SELECT FirstName,LastName FROM Contact WHERE (Department != null AND Department = 'Internal Operations') OR (Level__c != null AND Level__c = 'Primary')
+```
+### 5. Subqueries / Nested queries
+```
+String soql = new QueryBuilder()
+                  .sel('Id')
+                  .sel('Name')
+                  .sub(new QueryBuilder()
+                           .sel('FirstName')
+                           .sel('LastName')
+                           .frm('Contacts')
+                           .lmt(5))
+                  .frm('Account')
+                  .soql();
+System.debug(soql);
+```
+Outputs to
+```
+SELECT Id,Name,(SELECT FirstName,LastName FROM Contacts LIMIT 5) FROM Account
+```
+
+### 6. Sorting / Limiting records
+```
+String soql = new QueryBuilder()
+                  .sel('FirstName')
+                  .sel('LastName')
+                  .frm('Contact')
+                  .sort('FirstName')
+                  .sort('LastName', 'DESC')
+                  .lmt(5)
+                  .soql();
+System.debug(soql);
+```
+Outputs to 
+```
+SELECT FirstName,LastName FROM Contact ORDER BY FirstName ASC,LastName DESC LIMIT 5
+```
+## Authors
+- **Jagdeep Sharma**
