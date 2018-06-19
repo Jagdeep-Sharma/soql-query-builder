@@ -24,3 +24,18 @@ Outputs to
 ```
 SELECT FirstName,LastName,Email,Phone,Department FROM Contact
 ```
+### 3. Filtering records
+```
+String soql = new QueryBuilder()
+                  .sel('FirstName')
+                  .sel('LastName')
+                  .frm('Contact')
+                  .whr('Department != null')
+                  .whr('Level__c = \'Primary\'')
+                  .soql();
+System.debug(soql);
+```
+Outputs to
+```
+SELECT FirstName,LastName FROM Contact WHERE Department != null AND Level__c = 'Primary'
+```
