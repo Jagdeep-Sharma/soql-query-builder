@@ -10,6 +10,7 @@ String soql = new QueryBuilder()
                   .soql();
 System.debug(soql);
 ```
+**Note: This is a costly operations and could slowdown your application. Please make sure that the queried object doesn't have any Rich-Text or Long-Text area fields.**
 ### 2. Selecting specific fields
 ```
 String soql = new QueryBuilder()
